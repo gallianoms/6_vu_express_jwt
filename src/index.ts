@@ -19,7 +19,7 @@ interface Customer extends Admin {}
 const validCredentials: Record<string, string> = {
   admin: 'admin',
   tester: 'tester',
-  user: 'user',
+  dev: 'dev',
 };
 
 const admins: Admin[] = [

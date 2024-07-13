@@ -51,7 +51,7 @@ Base URL Online: `https://express-jwt-gallianoms-gallianoms-projects.vercel.app?
       "password": "admin"
     }
     ```
-  - Valid roles: admin, tester, user.
+  - Valid roles: admin, tester, dev.
 
 ### Admin Resources
 
