@@ -13,8 +13,8 @@ This project demonstrates a basic authentication and authorization system using 
 To run this project locally, make sure you have Node.js installed. Then, clone the repository and install dependencies:
 
 ```bash
-git clone <repository-url>
-cd <project-folder>
+git clone https://github.com/gallianoms/6_vu_express_jwt
+cd 6_vu_express_jwt
 npm install
 npm run dev
 ```
@@ -77,7 +77,7 @@ Base URL Online: `https://express-jwt-gallianoms-gallianoms-projects.vercel.app?
 
 ## JWT Token
 
-- Tokens issued by `/api/login/authenticate` endpoint are valid for 6 hours for practicality, you should change it.
+- Tokens issued by `/api/login/authenticate` endpoint are valid for 6 hours for practicality, you should change it in production.
 
 ## Error Handling
 
