@@ -1,4 +1,4 @@
-# Project Name
+# Express JWT
 
 This project demonstrates a basic authentication and authorization system using Express.js and JWT (JSON Web Tokens). It provides endpoints to authenticate users and access data based on user roles.
 
@@ -99,4 +99,3 @@ This README provides a basic structure to get users started with the project, in
 
 - [Medium Article on JWT Authentication in Node.js](https://medium.com/@diego.coder/autenticaci%C3%B3n-en-node-js-con-json-web-tokens-y-express-ed9d90c5b579)
 - [DigitalOcean Tutorial on Node.js JWT with Express.js](https://www.digitalocean.com/community/tutorials/nodejs-jwt-expressjs)
-# 6_vu_express_jwt
