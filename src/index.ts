@@ -102,7 +102,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (_, res: Response) => {
   res.json({
     base_local_url: 'http://localhost:3000',
-    base_local_online:
+    base_online_url:
       'https://express-jwt-gallianoms-gallianoms-projects.vercel.app?_vercel_share=Yi2jUrNLFVVjInnPApEi825FlL1rtASY',
     routes: [
       { method: 'GET', path: '/api/login/ping', description: "Returns 'pong'" },
