@@ -30,6 +30,10 @@ npm run dev
 
 ## API Endpoints
 
+Base URL Local: `http://localhost:3000`
+
+Base URL Online: `https://express-jwt-gallianoms-gallianoms-projects.vercel.app?_vercel_share=Yi2jUrNLFVVjInnPApEi825FlL1rtASY`
+
 ### Ping
 
 - **GET** `/api/login/ping`
@@ -50,10 +54,6 @@ npm run dev
   - Valid roles: admin, tester, user.
 
 ### Admin Resources
-
-Base URL Local: `http://localhost:3000`
-
-Base URL Online: `https://express-jwt-gallianoms-gallianoms-projects.vercel.app?_vercel_share=Yi2jUrNLFVVjInnPApEi825FlL1rtASY`
 
 - **GET** `/api/admin`
 
