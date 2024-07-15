@@ -23,41 +23,17 @@ const validCredentials: Record<string, string> = {
 };
 
 const admins: Admin[] = [
-  {
-    id: '1',
-    name: 'John',
-  },
-  {
-    id: '2',
-    name: 'Doe',
-  },
-  {
-    id: '3',
-    name: 'Anna',
-  },
-  {
-    id: '4',
-    name: 'Peter',
-  },
+  { id: '1', name: 'John' },
+  { id: '2', name: 'Doe' },
+  { id: '3', name: 'Anna' },
+  { id: '4', name: 'Peter' },
 ];
 
 const customers: Customer[] = [
-  {
-    id: '5',
-    name: 'Lucy',
-  },
-  {
-    id: '6',
-    name: 'Michael',
-  },
-  {
-    id: '7',
-    name: 'Sarah',
-  },
-  {
-    id: '8',
-    name: 'David',
-  },
+  { id: '5', name: 'Lucy' },
+  { id: '6', name: 'Michael' },
+  { id: '7', name: 'Sarah' },
+  { id: '8', name: 'David' },
 ];
 
 // Utils Functions
@@ -78,20 +54,23 @@ const verifyToken = (req: any, res: Response, next: NextFunction) => {
 
 const authenticateUser = (
   credentials: UserCredentials,
-): { token: string } | null => {
+): { accessToken: string; refreshToken: string } | null => {
   const { role, password } = credentials;
   const storedPassword = validCredentials[role];
 
   if (!storedPassword || password !== storedPassword) return null;
 
-  const token = jwt.sign({ role }, secretKey, { expiresIn: '6h' });
-  return { token };
+  const accessToken = jwt.sign({ role }, secretKey, { expiresIn: '15m' });
+  const refreshToken = jwt.sign({ role }, refreshKey, { expiresIn: '7d' });
+
+  return { accessToken, refreshToken };
 };
 
 // Initializations
 const app = express();
 const port = process.env.PORT || 3000;
 const secretKey = 'secret';
+const refreshKey = 'refreshSecret';
 
 // Middlewares
 app.use(express.json());
@@ -110,10 +89,13 @@ app.get('/', (_, res: Response) => {
         method: 'POST',
         path: '/api/login/authenticate',
         description: 'Authenticates user credentials and returns a JWT token',
-        example_payload: {
-          role: 'admin',
-          password: 'admin',
-        },
+        example_payload: { role: 'admin', password: 'admin' },
+      },
+      {
+        method: 'POST',
+        path: '/api/login/refresh-token',
+        description: 'Refreshes the access token using the refresh token',
+        example_payload: { refreshToken: 'yourRefreshToken' },
       },
       {
         method: 'GET',
@@ -159,6 +141,32 @@ app.post('/api/login/authenticate', (req: Request, res: Response) => {
   }
 });
 
+app.post('/api/login/refresh-token', (req: Request, res: Response) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'Refresh token missing' });
+    }
+
+    jwt.verify(refreshToken, refreshKey, (err: unknown, decoded: any) => {
+      if (err) {
+        return res
+          .status(403)
+          .json({ message: 'Invalid or expired refresh token' });
+      }
+
+      const accessToken = jwt.sign({ role: decoded.role }, secretKey, {
+        expiresIn: '15m',
+      });
+
+      return res.status(200).json({ accessToken });
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 app.get('/api/admin', verifyToken, (_, res: Response) => {
   res.send({ data: admins });
 });
@@ -187,18 +195,3 @@ app.get('/api/customers/:id', verifyToken, (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`Server running at port: ${port}`);
 });
-
-// Note:
-// Base Url http://localhost:3000
-
-// Routes:
-// 1. GET /api/login/ping - Returns 'pong'
-// 2. POST /api/login/authenticate - Authenticates user credentials and returns a JWT token
-// 3. GET /api/admin - Retrieves all admins (requires authentication)
-// 4. GET /api/admin/:id - Retrieves a specific admin by ID (requires authentication)
-// 5. GET /api/customers - Retrieves all customers (requires authentication)
-// 6. GET /api/customers/:id - Retrieves a specific customer by ID (requires authentication)
-
-// Reference Guide
-// https://medium.com/@diego.coder/autenticaci%C3%B3n-en-node-js-con-json-web-tokens-y-express-ed9d90c5b579
-// https://www.digitalocean.com/community/tutorials/nodejs-jwt-expressjs
